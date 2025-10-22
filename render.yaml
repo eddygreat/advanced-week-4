@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: flask-priority-app
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true # Render will generate a strong secret key for you
+      - key: PYTHONUNBUFFERED
+        value: "1"
