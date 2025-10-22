@@ -6,9 +6,10 @@ import joblib
 import csv
 import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
+import os
 
 app = Flask(__name__)
-app.secret_key = 'dev-secret-key'
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -291,4 +292,4 @@ def logout():
         return redirect(url_for('index', msg='You have been logged out.'))
 
 if __name__ == '__main__':
-        app.run(debug=True)
+        app.run(debug=False)
