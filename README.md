@@ -78,26 +78,82 @@ Next steps / suggestions
 Notes about the audit
 - The audit synthesizes a `team` attribute (team_A/team_B/team_C) for demonstration. Because the dataset is synthetic for this demo (priority labels are derived from a feature), fairness metrics are illustrative; for production use you should run audits on labeled holdout data that include real sensitive attributes.
 
-## How to run the web app
+## Setup and Running Instructions
 
-1. Create and activate a Python virtual environment (Windows PowerShell):
+### 1. Environment Setup (Windows PowerShell)
 
+1. Create a Python virtual environment:
 ```powershell
 python -m venv .venv
+```
+
+2. Activate the virtual environment:
+```powershell
 .\.venv\Scripts\Activate.ps1
 ```
 
-2. Install dependencies:
-
+3. Install required packages:
 ```powershell
-python -m pip install -r requirements.txt
+.\.venv\Scripts\pip install -r requirements.txt
 ```
 
-3. Run the app:
+### 2. Running the Complete Pipeline
 
+1. Train the model:
 ```powershell
-python web.py
+.\.venv\Scripts\python train_priority_model.py
 ```
+This will create `model.pkl` with the trained model.
+
+2. Run the fairness audit:
+```powershell
+.\.venv\Scripts\python fairness_audit.py
+```
+This will generate `fairness_report.json` with audit metrics.
+
+3. Generate the PDF report:
+```powershell
+.\.venv\Scripts\python generate_audit_pdf.py
+```
+This will create a PDF report from the audit results.
+
+### 3. Running the Web Service
+
+You can either run the web service directly:
+```powershell
+.\.venv\Scripts\python web.py
+```
+
+Or use the integrated test script that starts the server and runs a test prediction:
+```powershell
+.\.venv\Scripts\python run_test.py
+```
+
+### API Endpoints
+
+The web service runs on `http://127.0.0.1:5000` and provides:
+
+- POST `/predict`: Makes predictions using the trained model
+  - Input: JSON with 30 feature values (breast cancer dataset features)
+  - Output: JSON with prediction ("low", "medium", or "high")
+
+### Troubleshooting
+
+1. If you encounter TLS/SSL errors when installing packages:
+   - Try setting these environment variables before running pip:
+   ```powershell
+   $env:REQUESTS_CA_BUNDLE=$null
+   $env:SSL_CERT_FILE=$null
+   ```
+
+2. If port 5000 is in use:
+   - You can modify the port in `web.py` or `run_test.py`
+   - Default port is 5000
+
+3. Common issues:
+   - Ensure all files (`model.pkl`, `fairness_report.json`) are generated before running the web service
+   - Make sure you're in the correct directory and the virtual environment is activated
+   - Verify all required packages are installed using `pip freeze`
 
 4. Open http://127.0.0.1:5000/ in your browser. Demo users: `alice/password123`, `bob/hunter2`.
 
