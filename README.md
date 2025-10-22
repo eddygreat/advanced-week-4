@@ -67,12 +67,12 @@ Next steps / suggestions
 - Optionally expose a single public API function in `sort.py` that selects the best strategy based on options.
 
 ## Web app
-- `web.py`: single-file Flask app (embedded HTML/CSS/JS). It provides a login/logout flow and a homepage to view and sort generated sample data by `age`, `grade`, `sex`, `nationality`, and `race`.
+- `app.py`: single-file Flask app (embedded HTML/CSS/JS). It provides a login/logout flow and a homepage to view and sort generated sample data by `age`, `grade`, `sex`, `nationality`, and `race`.
 
 ## Model & Fairness audit
 - `train_priority_model.py`: trains a RandomForest pipeline on the sklearn breast-cancer dataset and synthesizes a 3-class priority label (low/medium/high) based on `mean radius`. The trained pipeline is saved to `model.pkl` as a dict with keys `pipeline` and `label_map`.
 - `model.pkl`: trained model artifact (pipeline + label map).
-- `fairness_audit.py`: loads `model.pkl`, synthesizes true priority labels for a sampled test set (same rules as training), predicts with the saved pipeline, computes overall and per-team accuracy / F1, and (when AIF360 is installed) computes statistical parity and disparate impact for the `high` priority class. Outputs `fairness_report.json`.
+- `fairness_audit.py`: loads `model.pkl`, synthesizes true priority labels for a sampled test set (same rules as training), predicts with the saved pipeline, computes overall and per-team accuracy / F1, and (requires AIF360 for full metrics) computes statistical parity and disparate impact for the `high` priority class. Outputs `fairness_report.json`.
 - `fairness_report.json`: produced by the audit; contains overall and per-team metrics (and AIF360 metrics when available).
 
 Notes about the audit
@@ -121,7 +121,7 @@ This will create a PDF report from the audit results.
 
 You can either run the web service directly:
 ```powershell
-.\.venv\Scripts\python web.py
+.\.venv\Scripts\python app.py
 ```
 
 Or use the integrated test script that starts the server and runs a test prediction:
@@ -147,7 +147,7 @@ The web service runs on `http://127.0.0.1:5000` and provides:
    ```
 
 2. If port 5000 is in use:
-   - You can modify the port in `web.py` or `run_test.py`
+   - You can modify the port in `app.py` or `run_test.py`
    - Default port is 5000
 
 3. Common issues:
@@ -175,12 +175,6 @@ If AIF360 is not installed the script will still write per-team metrics; install
 
 Notes
 - The web app uses a file-based hashed user store (`users.json`) and secure password hashing via werkzeug; still only for demo use — do not use this as-is in production.
-- TLS / pip notes: If you saw pip/TLS CA errors during setup, they were caused by a user-level environment variable pointing at an invalid CA path. During development the quick remediation was to unset the `REQUESTS_CA_BUNDLE` and `CURL_CA_BUNDLE` env vars (PowerShell example below). To permanently remove a user env var use the System Environment control panel.
-
-```powershell
-Remove-Item Env:\REQUESTS_CA_BUNDLE -ErrorAction SilentlyContinue
-Remove-Item Env:\CURL_CA_BUNDLE -ErrorAction SilentlyContinue
-```
 
 ## Artifacts in this repo
 - `model.pkl` - trained model pipeline created by `train_priority_model.py`.
