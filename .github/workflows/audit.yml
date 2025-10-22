@@ -1,0 +1,33 @@
+name: Fairness audit
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  run-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run training (optional)
+        run: python train_priority_model.py
+      - name: Run fairness audit
+        run: python fairness_audit.py
+      - name: Generate PDF summary
+        run: python generate_audit_pdf.py
+      - name: Upload fairness_report.json
+        uses: actions/upload-artifact@v4
+        with:
+          name: fairness-report
+          path: |
+            fairness_report.json
+            fairness_audit_summary.pdf

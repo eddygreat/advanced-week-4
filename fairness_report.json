@@ -1,0 +1,29 @@
+{
+  "overall_accuracy": 0.995,
+  "per_team": {
+    "team_A": {
+      "accuracy": 0.9925373134328358,
+      "f1_macro": 0.993054801953337,
+      "support": 134
+    },
+    "team_B": {
+      "accuracy": 1.0,
+      "f1_macro": 1.0,
+      "support": 48
+    },
+    "team_C": {
+      "accuracy": 1.0,
+      "f1_macro": 1.0,
+      "support": 18
+    }
+  },
+  "parity": {
+    "group_positive_rate": {
+      "team_A": 0.3582089552238806,
+      "team_B": 0.25,
+      "team_C": 0.3333333333333333
+    },
+    "statistical_parity_difference": -0.02487562189054726,
+    "disparate_impact": 0.9305555555555556
+  }
+}
