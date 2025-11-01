@@ -1,4 +1,4 @@
-sort.py
+[Hospital_Readmission_Prediction_Report (2) (1).pdf](https://github.com/user-attachments/files/23281848/Hospital_Readmission_Prediction_Report.2.1.pdf)sort.py
 kindly view my app here https://sorty-app.onrender.com/
 This module provides several implementations to sort a list of dictionaries by a specified key.
 
@@ -198,3 +198,6 @@ Interpretation & next steps
   - Add the audit to CI so it runs when the model or data transforms change.
 
 If you'd like, I can create a short PDF summarizing these audit results, add CI steps to run the audit automatically, or implement a prediction endpoint in `web.py` that records inputs/predictions for monitoring.
+
+
+[Uploading Hospital_Readmission_Prediction_Report (2) (1).pdf…]()
